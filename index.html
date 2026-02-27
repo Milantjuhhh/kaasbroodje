@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Five Nights At Epstein</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background: #000;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            color: #fff;
+            background-image: url('images/epstein.png');
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: contain;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @font-face {
+            font-family: "PixelFont";
+            src: url("assets/fonts/pixelfont.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }       
+
+        /* Glitch overlay */
+        .glitch-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('images/glitch.gif') no-repeat center center;
+            background-size: cover;
+            opacity: 0.1; /* maakt het heel vaag */
+            pointer-events: none; /* zodat je menu nog klikbaar blijft */
+        }
+
+.menu {
+    position: absolute;  /* positioneer absoluut */
+    bottom: 130px;        /* afstand vanaf onderkant */
+    left: 20px;          /* afstand vanaf linkerkant */
+    display: flex;
+    flex-direction: column; /* stapel knoppen verticaal */
+    gap: 15px;             /* ruimte tussen knoppen */
+}
+
+        h1 {
+            width: 20%;
+            padding: 13px;
+            position: absolute;
+            top: 20px;      /* dichter bij de bovenkant */
+            left: 20px;     /* links uitlijnen */
+            transform: none; /* geen centreren nodig */
+            font-size: 3rem;
+            color: #eee;
+            text-shadow: 2px 2px 8px #000;
+            font-family: 'PixelFont', cursive; /* spooky/game-achtig lettertype */
+            z-index: 1;
+        }
+
+        .btn {
+            width: 300px;
+            padding: 8px 0;
+            border-radius: 8px;
+            text-align: center;
+            color: #fff;
+            text-decoration: none;
+            font-size: 3rem;
+            font-family: 'PixelFont', cursive; /* spooky/game-achtig lettertype */
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+            border-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Five Nights At Epstein</h1>
+
+    <div class="menu">
+        <a href="#" class="btn">Start Game</a>
+        <a href="#" class="btn">Options</a>
+        <a href="#" class="btn">Credits</a>
+        <a href="#" class="btn">Exit</a>
+    </div>
+
+    <!-- Glitch overlay -->
+    <div class="glitch-overlay"></div>
+</body>
+</html>
