@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Loading Screen</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    /* Volledige pagina achtergrond-afbeelding */
+    body {
+      background: #000 center / cover no-repeat;
+      background-image: url("images/LoadingScreen.png");
+      overflow: hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    /* Fade overlay (naar zwart) */
+    .fade-layer {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 900ms ease; /* fade duur */
+    }
+    body.fade-out .fade-layer {
+      opacity: 1;
+    }
+
+    /* Timer rechts-onder */
+    .timer {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.45);
+      color: #fff;
+      font-size: 14px;
+      line-height: 1;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      user-select: none;
+      transition: opacity 300ms ease;
+    }
+    body.fade-out .timer {
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer" id="timer">7</div>
+  <div class="fade-layer" aria-hidden="true"></div>
+
+  <script>
+    // Instellingen
+    const secondsTotal = 7;
+
+    // <-- vervang door jouw doel-URL / pagina
+    const redirectUrl = "https://example.com";
+
+    // Moet matchen met transition duur van .fade-layer
+    const fadeDurationMs = 900;
+
+    // Logica
+    const timerEl = document.getElementById("timer");
+    let remaining = secondsTotal;
+
+    timerEl.textContent = remaining;
+
+    const interval = setInterval(() => {
+      remaining -= 1;
+
+      if (remaining <= 0) {
+        clearInterval(interval);
+        timerEl.textContent = "0";
+
+        // start fade-out
+        document.body.classList.add("fade-out");
+
+        // redirect na fade
+        setTimeout(() => {
+          window.location.assign(redirectUrl);
+        }, fadeDurationMs);
+
+        return;
+      }
+
+      timerEl.textContent = remaining;
+    }, 1000);
+  </script>
+</body>
+</html>
