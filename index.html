@@ -99,7 +99,7 @@
         <a href="Loading screen.html" class="btn">Start Game</a>
         <a href="#" class="btn">Options</a>
         <a href="#" class="btn">Credits</a>
-        <a href="#" class="btn">Exit</a>
+        <a href="#" class="btn" onclick="exitGame()">Exit</a>
     </div>
 
 <audio id="menuMusic" loop preload="auto">
@@ -125,6 +125,7 @@
   document.addEventListener("keydown", startMusicOnce, { once: true });
 </script>
 
+<script src="exit.js"></script>
 
     <!-- Glitch overlay -->
     <div class="glitch-overlay"></div>
