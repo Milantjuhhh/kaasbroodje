@@ -29,6 +29,13 @@
   </div>
 </div>
 
+<audio id="menuMusic" loop preload="auto">
+  <source src="audio/FNAF_Ambience.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="jumpscareSound" src="audio/cassidy-cannon-fredbear-jumpscare.mp3"></audio>
+<audio id="lureSoundAudio" src="audio/balloonboy.mp3" preload="auto"></audio>
+
 <div id="jumpscareScreen" class="jumpscare">
   <img id="jumpscareImg" src="">
 </div>
@@ -47,6 +54,9 @@
 
   const sixAMScreen = document.getElementById("sixAMScreen");
   const sixAMVideo = document.getElementById("sixAMVideo");
+
+  const jumpscareSound = document.getElementById("jumpscareSound");
+
 
 
 
@@ -120,7 +130,7 @@ setInterval(() => {
   checkJumpscare();
   renderCamera();
 
-}, 7000); 
+}, 3000); 
 
   function lureSound() {
     characters.forEach(char => {
@@ -223,25 +233,39 @@ function lureSound() {
 }
 
 
+let gameOver = false;
+
 function checkJumpscare() {
+  if (gameOver || nightOver) return;
+
   characters.forEach(char => {
     if (char.state === "office") {
 
+      gameOver = true;
+
       setTimeout(() => {
 
-        // 🔥 toon jumpscare image
+        // 🔇 stop ambience
+        music.pause();
+
+        // 🔊 speel jumpscare geluid
+        jumpscareSound.currentTime = 0;
+        jumpscareSound.volume = 1;
+        jumpscareSound.play();
+
+        // 💥 toon image
         jumpscareImg.src = char.img;
         jumpscareScreen.style.display = "flex";
 
-        // optioneel: camera sluiten
+        // camera uit
         overlay.style.display = "none";
 
-        // reload na paar seconden
+        // terug naar menu
         setTimeout(() => {
-        goToMenu();
-    }, 2000);
+          goToMenu();
+        }, 2500);
 
-      }, 500);
+      }, 300);
 
     }
   });
@@ -272,6 +296,54 @@ setTimeout(() => {
   };
 
 }, nightDuration);
+
+  const music = document.getElementById("menuMusic");
+
+  async function startMusicOnce() {
+    try {
+      await music.play();
+      document.removeEventListener("pointerdown", startMusicOnce);
+      document.removeEventListener("keydown", startMusicOnce);
+    } catch (e) {
+      console.log("Play blocked:", e);
+    }
+  }
+
+  // Start bij eerste user interaction (mobiel + desktop)
+  document.addEventListener("pointerdown", startMusicOnce, { once: true });
+  document.addEventListener("keydown", startMusicOnce, { once: true });
+
+  
+
+function lureSound() {
+  const lureAudio = document.getElementById("lureSoundAudio");
+
+  // speel audio af
+  lureAudio.currentTime = 0;
+  lureAudio.volume = 1;
+  lureAudio.play();
+
+  characters.forEach(char => {
+
+    // 🎯 Alleen reageren als character bij deze camera hoort
+    if (char.room === currentCamera) {
+
+      // van hall terug naar kamer
+      if (char.state === "hall" && Math.random() < 0.9) {
+        char.state = "room";
+      }
+
+      // van office terug naar hall
+      else if (char.state === "office" && Math.random() < 0.7) {
+        char.state = "hall";
+      }
+
+    }
+
+  });
+
+  renderCamera();
+}
 
 </script>
 
