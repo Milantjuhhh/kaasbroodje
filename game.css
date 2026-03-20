@@ -1,0 +1,230 @@
+ body { margin:0; background:black; color:white; font-family:Arial; overflow:hidden; }
+
+  .office {
+    background-image: url("images/Office.JPG");
+    background-size: cover;
+    height: 100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    position:relative;
+  }
+
+  .openCamBtn {
+    position:absolute;
+    bottom:20px;
+    padding:12px 20px;
+    cursor:pointer;
+  }
+
+  /* Camera overlay */
+  .camera-overlay {
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.95);
+    display:none;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+  }
+
+  .camera-view {
+    width:600px;
+    height:350px;
+    border:2px solid #444;
+    margin-bottom:20px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#111;
+    position:relative;
+  }
+
+
+
+  .controls button {
+    margin:5px;
+    padding:10px;
+    cursor:pointer;
+  }
+
+/* Overlay als "tablet" */
+.camera-overlay{
+  position: fixed;
+  inset: 0;
+  display: none;          /* jij zet dit via JS op flex */
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.65);
+  z-index: 999;
+}
+
+/* Cameravenster */
+.camera-view{
+  width: min(900px, 92vw);
+  height: min(520px, 60vh);
+  position: relative;
+  border: 3px solid rgba(255,255,255,.15);
+  background-color: #0a0a0a;
+
+  /* Dit is je achtergrond */
+  background-image: url("images/Room1.JPG"); /* zet jouw pad/naam hier */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* "FNAF-achtig" effect */
+  filter: contrast(1.05) brightness(.9) saturate(.8);
+  overflow: hidden;
+}
+
+/* Ruis/scanlines bovenop de camera */
+.camera-view::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.05),
+      rgba(255,255,255,.05) 1px,
+      rgba(0,0,0,0) 3px,
+      rgba(0,0,0,0) 6px
+    );
+  mix-blend-mode: overlay;
+  opacity: .35;
+}
+
+.camera-view::after{
+  content:"";
+  position:absolute;
+  inset:-20%;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,0) 0 55%, rgba(0,0,0,.55) 75%, rgba(0,0,0,.9) 100%);
+  opacity:.9;
+}
+
+
+
+
+
+
+
+
+.controls{
+  display:flex;
+  gap:10px;
+  flex-wrap: wrap;
+  justify-content:center;
+  margin-top: 12px;
+}
+
+.controls button,
+.openCamBtn{
+  font-family: "Arial", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+
+  padding: 10px 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(120,255,180,.25);
+  background: linear-gradient(#111, #070707);
+  color: rgba(200,255,220,.9);
+
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8) inset,
+    0 8px 18px rgba(0,0,0,.45);
+
+  cursor: pointer;
+  transition: transform .08s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.controls button:hover,
+.openCamBtn:hover{
+  border-color: rgba(120,255,180,.5);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.8) inset,
+    0 10px 22px rgba(0,0,0,.55),
+    0 0 18px rgba(90,255,160,.12);
+}
+
+.controls button:active,
+.openCamBtn:active{
+  transform: translateY(1px);
+}
+
+/* "Actieve camera" knop highlight (zie JS tip hieronder) */
+.controls button.active{
+  border-color: rgba(120,255,180,.85);
+  color: rgba(235,255,245,.98);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.85) inset,
+    0 0 22px rgba(90,255,160,.18);
+}
+
+
+
+
+.character img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* of 'cover' als je wil croppen */
+  image-rendering: auto;
+}
+
+
+.character img {
+  width: 150px;
+  height: auto;
+}
+
+.jumpscare {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.jumpscare img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.jumpscare img {
+  animation: shake 0.2s infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(2px, 2px); }
+  50% { transform: translate(-2px, -2px); }
+  100% { transform: translate(2px, -2px); }
+}
+
+
+.sixam {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.sixam video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

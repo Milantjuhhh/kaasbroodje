@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FNAF Camera System</title>
+<link rel="STYLESHEET" href="game.css" type="text/css">
+</head>
+<body>
+
+<div class="office">
+
+  <button class="openCamBtn" onclick="toggleCamera(true)">Open Camera</button>
+
+  <div class="camera-overlay" id="cameraOverlay">
+    <div class="camera-view" id="cameraView"></div>
+
+    <div class="controls">
+      <button onclick="switchCamera(0)">Cam 1</button>
+      <button onclick="switchCamera(1)">Cam 2</button>
+      <button onclick="switchCamera(2)">Cam 3</button>
+      <button onclick="switchCamera(3)">Cam 4 (Hall)</button>
+    </div>
+
+    <div class="controls">
+      <button onclick="lureSound()">Play Sound</button>
+      <button onclick="toggleCamera(false)">Close Camera</button>
+    </div>
+  </div>
+</div>
+
+<div id="jumpscareScreen" class="jumpscare">
+  <img id="jumpscareImg" src="">
+</div>
+
+<div id="sixAMScreen" class="sixam">
+  <video id="sixAMVideo" src="Video's/6AM.mp4"></video>
+</div>
+
+<script>
+  let currentCamera = 0;
+  const overlay = document.getElementById("cameraOverlay");
+  const cameraView = document.getElementById("cameraView");
+
+  const jumpscareScreen = document.getElementById("jumpscareScreen");
+  const jumpscareImg = document.getElementById("jumpscareImg");
+
+  const sixAMScreen = document.getElementById("sixAMScreen");
+  const sixAMVideo = document.getElementById("sixAMVideo");
+
+
+
+  
+const characters = [
+  { name: "Jeff", room: 0, state: "room", img: "images/Jeff.png" },
+  { name: "Kanye", room: 1, state: "room", img: "images/Kanye.JPG" },
+  { name: "Diddy", room: 2, state: "room", img: "images/Diddy.JPG" }
+];
+
+  function toggleCamera(open) {
+    overlay.style.display = open ? "flex" : "none";
+    renderCamera();
+  }
+
+  function renderCamera() {
+    cameraView.innerHTML = "";
+
+    if (currentCamera === 3) {
+      // Hall camera
+      const hallChar = characters.find(c => c.state === "hall");
+
+      if (hallChar) {
+        const el = document.createElement("div");
+        el.classList.add("character");
+        el.textContent = hallChar.name;
+        cameraView.appendChild(el);
+      } else {
+        cameraView.textContent = "Empty hall";
+      }
+
+      return;
+    }
+
+    const char = characters.find(c => c.room === currentCamera);
+
+    if (char.state === "room") {
+      const el = document.createElement("div");
+      el.classList.add("character");
+      el.textContent = char.name;
+      cameraView.appendChild(el);
+    } else {
+      cameraView.textContent = "Empty";
+    }
+  }
+
+  function switchCamera(cam) {
+    currentCamera = cam;
+    renderCamera();
+  }
+
+setInterval(() => {
+
+  if (nightOver) return;
+
+  const hallOccupied = characters.some(c => c.state === "hall");
+
+  characters.forEach(char => {
+
+    // 🐢 VEEL langzamer movement
+    if (char.state === "room" && !hallOccupied && Math.random() < 0.1) {
+      char.state = "hall";
+    }
+
+    else if (char.state === "hall" && Math.random() < 0.15) {
+      char.state = "office";
+    }
+
+  });
+
+  checkJumpscare();
+  renderCamera();
+
+}, 7000); 
+
+  function lureSound() {
+    characters.forEach(char => {
+
+      if (char.state === "hall" && Math.random() < 0.9) {
+        char.state = "room";
+      }
+
+      else if (char.state === "office" && Math.random() < 0.7) {
+        char.state = "hall";
+      }
+
+    });
+
+    renderCamera();
+  }
+
+
+
+
+
+
+const camBackgrounds = [
+  'images/Room1.JPG', // Cam 1 (index 0)
+  'images/Room2.JPG', // Cam 2 (index 1)
+  'images/Room3.JPG', // Cam 3 (index 2)
+  'images/Hall.JPG'   // Cam 4 (Hall) (index 3)
+];
+
+
+
+
+
+
+function createCharacterElement(char) {
+  const wrap = document.createElement("div");
+  wrap.classList.add("character");
+
+  const img = document.createElement("img");
+  img.src = char.img;
+  img.alt = char.name;
+  img.draggable = false;
+
+  wrap.appendChild(img);
+  return wrap;
+}
+
+
+
+
+function renderCamera() {
+  cameraView.innerHTML = "";
+
+  // achtergrond per camera
+  cameraView.style.backgroundImage = `url("${camBackgrounds[currentCamera]}")`;
+
+  if (currentCamera === 3) {
+    // Hall camera
+    const hallChar = characters.find(c => c.state === "hall");
+
+    if (hallChar) {
+      cameraView.appendChild(createCharacterElement(hallChar));
+    } else {
+      cameraView.textContent = "";
+    }
+    return;
+  }
+
+  const char = characters.find(c => c.room === currentCamera);
+
+  if (char && char.state === "room") {
+    cameraView.appendChild(createCharacterElement(char));
+  } else {
+    cameraView.textContent = "";
+  }
+}
+
+function lureSound() {
+
+  characters.forEach(char => {
+
+    // 🎯 Alleen reageren als character bij deze camera hoort
+    if (char.room === currentCamera) {
+
+      // van hall terug naar kamer
+      if (char.state === "hall" && Math.random() < 0.9) {
+        char.state = "room";
+      }
+
+      // van office terug naar hall
+      else if (char.state === "office" && Math.random() < 0.7) {
+        char.state = "hall";
+      }
+
+    }
+
+  });
+
+  renderCamera();
+}
+
+
+function checkJumpscare() {
+  characters.forEach(char => {
+    if (char.state === "office") {
+
+      setTimeout(() => {
+
+        // 🔥 toon jumpscare image
+        jumpscareImg.src = char.img;
+        jumpscareScreen.style.display = "flex";
+
+        // optioneel: camera sluiten
+        overlay.style.display = "none";
+
+        // reload na paar seconden
+        setTimeout(() => {
+        goToMenu();
+    }, 2000);
+
+      }, 500);
+
+    }
+  });
+}
+
+function goToMenu() {
+  window.location.href = "index.html";
+}
+
+let nightDuration = 180000; //tijd
+let nightOver = false;
+
+setTimeout(() => {
+  nightOver = true;
+
+  // camera uit
+  overlay.style.display = "none";
+
+  // toon video scherm
+  sixAMScreen.style.display = "flex";
+
+  // speel video af
+  sixAMVideo.play();
+
+  // na video → menu
+  sixAMVideo.onended = () => {
+    goToMenu();
+  };
+
+}, nightDuration);
+
+</script>
+
+
+
+</body>
+</html>
