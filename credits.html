@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <title>Credits - Five Nights at Epstein's</title>
+    <style>
+        body {
+            width: 100%;
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+            margin: 0;
+            color: #f6ff00; 
+            font-family: "Droid Sans", Arial, sans-serif;
+            font-weight: 700;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/123163/stars.png') repeat;
+            z-index: 0;
+        }
+
+        .fade {
+            position: relative;
+            width: 100%;
+            min-height: 40vh; /* Iets minder fade voor betere leesbaarheid */
+            top: 0;
+            background-image: linear-gradient(0deg, transparent, black 60%);
+            z-index: 1;
+        }
+
+        .star-wars {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            height: 1000px;
+            /* Perspective verhoogd naar 600px om tekst 'dichterbij' te laten lijken */
+            perspective: 600px; 
+            text-align: justify;
+        }
+
+        .crawl {
+            position: relative;
+            /* De animatietijd is nu 90s (was 60s) voor een rustiger tempo */
+            animation: crawl 90s linear forwards;
+        }
+
+        .crawl .title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+        }
+
+        @keyframes crawl {
+            0% {
+                top: 500px;
+                /* Hoek minder schuin (15deg) zodat het minder plat ligt */
+                transform: rotateX(15deg) translateZ(0);
+            }
+            100% {
+                top: -5000px;
+                transform: rotateX(20deg) translateZ(-1500px);
+            }
+        }
+
+        h2 { text-align: center; color: #fff; margin-top: 60px; font-size: 1.8em; }
+        p { line-height: 1.6; font-size: 1.4em; text-align: center; }
+
+        /* Overlay om muziek te starten */
+        #start-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            font-size: 2em;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-overlay" onclick="startCredits()">
+        KLIK OM DE CREDITS TE STARTEN
+    </div>
+
+    <div class="stars"></div>
+    <div class="fade"></div>
+
+    <audio id="menuMusic" loop>
+        <source src="audio/Star Wars Intro HD 1080p.mp3" type="audio/mpeg">
+    </audio>
+
+    <section class="star-wars">
+        <div id="crawl-text" class="crawl" style="display: none;">
+            <div class="title">
+                <p>Episode I</p>
+                <h1>Five Nights at Epstein's</h1>
+            </div>
+            
+            <p>Het is een tijd van grote onrust. De bewaker is gearriveerd op het eiland om de nachtdienst te draaien...</p>
+
+            <h2>Hoofdprogrammeurs</h2>
+            <p>Aiden Lindner, Milan Poll & Sezer Yildiz</p>
+
+            <h2>Creative Director</h2>
+            <p>Jeffrey Epstein</p>
+
+            <h2>Sound Design</h2>
+            <p>Allemaal eerlijk geript van Scott Cawthon</p>
+
+            <h2>Speciale Dank Aan</h2>
+            <p>Scott Cawthon voor de inspiratie</p>
+            <p>De FBI (die hopelijk niet meekijkt)</p>
+            <p>Iedereen die de demo heeft overleefd</p>
+
+            <br><br><br>
+            <h2 style="font-size: 3.5em;">BEDANKT VOOR HET SPELEN</h2>
+        </div>
+    </section>
+
+    <script>
+        function startCredits() {
+            // Verberg de overlay
+            document.getElementById('start-overlay').style.display = 'none';
+            // Start de muziek
+            const music = document.getElementById('menuMusic');
+            music.play();
+            // Laat de tekst zien en start de animatie
+            document.getElementById('crawl-text').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
